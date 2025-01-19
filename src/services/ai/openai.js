@@ -24,7 +24,7 @@ const getOpenAIInstance = () => {
   }
   return new OpenAI({
     apiKey,
-    baseURL: 'https://api.pawan.krd/v1',
+    baseURL: 'http://0.0.0.0:3040/v1',
     dangerouslyAllowBrowser: true
   });
 };
