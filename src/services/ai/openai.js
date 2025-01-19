@@ -47,6 +47,9 @@ export async function generateAIResponse(message, conversationHistory = []) {
     return completion.choices[0].message.content;
   } catch (error) {
     console.error('OpenAI API Error:', error);
+    if (error.code === 'insufficient_quota') {
+      throw new Error('OpenAI API quota exceeded. Please check your API usage limits or use a different API key.');
+    }
     throw new Error('Failed to generate AI response. Please check your API key configuration.');
   }
 }
