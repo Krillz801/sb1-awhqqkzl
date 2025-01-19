@@ -19,11 +19,12 @@ Important guidelines:
 
 const getOpenAIInstance = () => {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  if (!apiKey) {
+  if (!apiKey || apiKey.trim() === '') {
     throw new Error('OpenAI API key not found. Please add VITE_OPENAI_API_KEY to your Replit Secrets.');
   }
   return new OpenAI({
     apiKey,
+    baseURL: 'https://api.pawan.krd/v1',
     dangerouslyAllowBrowser: true
   });
 };
@@ -51,9 +52,9 @@ export async function generateAIResponse(message, conversationHistory = []) {
   } catch (error) {
     console.error('OpenAI API Error:', error);
     if (error.code === 'invalid_api_key') {
-      throw new Error('Invalid OpenAI API key. Please check your API key in Replit Secrets.');
+      throw new Error('Invalid API key. Please check your API key in Replit Secrets.');
     } else if (error.code === 'insufficient_quota') {
-      throw new Error('OpenAI API quota exceeded. Please check your API usage limits.');
+      throw new Error('API quota exceeded. Please check your API usage limits.');
     }
     throw new Error('Failed to generate AI response. Please try again later.');
   }
