@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web"]
+modules = ["nodejs-20", "web", "dotnet-7.0", "dotnet-8.0", "bash", "c-clang14", "cpp-clang14", "java-graalvm22.3", "nodejs-23", "nodejs-22", "nodejs-19", "nodejs-18", "nodejs-16", "swift-5.8", "swift-5.6", "typescript-language-server", "nodejs-with-prybar-18"]
 run = "npm run dev"
 
 [nix]
@@ -6,3 +6,13 @@ channel = "stable-24_05"
 
 [deployment]
 run = ["sh", "-c", "npm run dev"]
+
+[[ports]]
+localPort = 5173
+externalPort = 80
+exposeLocalhost = true
+
+[[ports]]
+localPort = 5174
+externalPort = 3000
+exposeLocalhost = true

@@ -1,4 +1,5 @@
-import { NativeScriptConfig } from '@nativescript/core';
+npm install -g nativescript
+nativescript run iosimport { NativeScriptConfig } from '@nativescript/core';
 
 export default {
   id: 'org.nativescript.app',
@@ -8,4 +9,4 @@ export default {
     v8Flags: '--expose_gc',
     markingMode: 'none'
   }
-} as NativeScriptConfig;
+} as NativeScriptConfig;npm install -g expo-cli
