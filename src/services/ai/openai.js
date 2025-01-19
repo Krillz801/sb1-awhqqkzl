@@ -1,11 +1,6 @@
 
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
-
 const SYSTEM_PROMPT = `You are an empathetic and supportive AI therapist assistant. Your role is to:
 - Listen actively and respond with genuine empathy
 - Validate feelings and experiences
@@ -22,12 +17,20 @@ Important guidelines:
 - Encourage professional help when needed
 - Maintain appropriate boundaries`;
 
-export async function generateAIResponse(message, conversationHistory = []) {
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
-    throw new Error('OpenAI API key is not configured. Please add it to Replit Secrets.');
+const getOpenAIInstance = () => {
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('OpenAI API key not found. Please add VITE_OPENAI_API_KEY to your Replit Secrets.');
   }
+  return new OpenAI({
+    apiKey,
+    dangerouslyAllowBrowser: true
+  });
+};
 
+export async function generateAIResponse(message, conversationHistory = []) {
   try {
+    const openai = getOpenAIInstance();
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
       ...conversationHistory.map(msg => ({
@@ -47,9 +50,11 @@ export async function generateAIResponse(message, conversationHistory = []) {
     return completion.choices[0].message.content;
   } catch (error) {
     console.error('OpenAI API Error:', error);
-    if (error.code === 'insufficient_quota') {
-      throw new Error('OpenAI API quota exceeded. Please check your API usage limits or use a different API key.');
+    if (error.code === 'invalid_api_key') {
+      throw new Error('Invalid OpenAI API key. Please check your API key in Replit Secrets.');
+    } else if (error.code === 'insufficient_quota') {
+      throw new Error('OpenAI API quota exceeded. Please check your API usage limits.');
     }
-    throw new Error('Failed to generate AI response. Please check your API key configuration.');
+    throw new Error('Failed to generate AI response. Please try again later.');
   }
 }
