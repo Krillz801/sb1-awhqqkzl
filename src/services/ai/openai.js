@@ -1,7 +1,8 @@
+
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
@@ -22,6 +23,10 @@ Important guidelines:
 - Maintain appropriate boundaries`;
 
 export async function generateAIResponse(message, conversationHistory = []) {
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
+    throw new Error('OpenAI API key is not configured. Please add it to Replit Secrets.');
+  }
+
   try {
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
@@ -42,6 +47,6 @@ export async function generateAIResponse(message, conversationHistory = []) {
     return completion.choices[0].message.content;
   } catch (error) {
     console.error('OpenAI API Error:', error);
-    return "I apologize, but I'm having trouble responding right now. Please try again in a moment.";
+    throw new Error('Failed to generate AI response. Please check your API key configuration.');
   }
 }
