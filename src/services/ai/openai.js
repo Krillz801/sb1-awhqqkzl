@@ -23,7 +23,7 @@ const getOpenAIInstance = () => {
     throw new Error('OpenAI API key not found. Please add VITE_OPENAI_API_KEY to your Replit Secrets.');
   }
   return new OpenAI({
-    apiKey,
+    apiKey: 'sk-no-key-required',
     baseURL: 'http://0.0.0.0:3040/v1',
     dangerouslyAllowBrowser: true
   });
